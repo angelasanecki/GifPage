@@ -1,10 +1,10 @@
-  $(document).ready(function() {
+    $(document).ready(function() {
 
 
 
 //create an array of strings. save it to a variable called "topics"
 
-var topics = ["horse", "monkey", "dog"];
+var topics = ["koala", "panda", "tiger"];
 
 
 
@@ -14,38 +14,38 @@ var topics = ["horse", "monkey", "dog"];
 
 function renderButtons() {
 
-		//delete buttons before adding new ones
+          //delete buttons before adding new ones
 
-		$("#buttons-view").empty();
+          $("#buttons-view").empty();
 
-		//loops through the array of topics
+          //loops through the array of topics
 
-		for (var i=0; i<topics.length; i++){
+          for (var i=0; i<topics.length; i++){
 
-			    //creating a button
+                   //creating a button
 
-				var b = $("<button>");
+                    var b = $("<button>");
 
-				//adding a class of topic to the button
+                    //adding a class of topic to the button
 
-				b.addClass("topic");
-
-
-					//adding a data-attribute
-				b.attr("data-name", topics[i]);
-
-				//providing the text for the button
-
-				b.text(topics[i]);
-
-				//adding the button to the buttons-view div 
-
-				$("#buttons-view").append(b);
-
-				//console.log("in the render buttons function");
+                    b.addClass("topic");
 
 
-				}
+                         //adding a data-attribute
+                    b.attr("data-name", topics[i]);
+
+                    //providing the text for the button
+
+                    b.text(topics[i]);
+
+                    //adding the button to the buttons-view div 
+
+                    $("#buttons-view").append(b);
+
+                    //console.log("in the render buttons function");
+
+
+                    }
 
 //end of renderButtons function
 }
@@ -67,7 +67,7 @@ function renderButtons() {
 
 
 
-	
+     
 
 
 
@@ -104,40 +104,39 @@ from the GIPHY API and place them on the page*/
 
 
 
-$("button").on("click", function() {
 
-	//console.log("I am in the button function");
+     function displayGifInfo () {
+    
 
-	var topic = $(this).attr("data-name");
+     var topic = $(this).attr("data-name");
 
 
 //Add this once button click function is added $(this).attr("data-name");
 
-	var queryURL ="http://api.giphy.com/v1/gifs/search?q=" + topic +"&limit=10&api_key=dc6zaTOxFJmzC";
+     var queryURL ="http://api.giphy.com/v1/gifs/search?q=" + topic +"&limit=10&api_key=dc6zaTOxFJmzC";
 
 
 
 
-	$.ajax({
+     $.ajax({
           url: queryURL,
           method: "GET"
         }).done(function(response) {
           var results = response.data;
 
-          //console.log(results);
           
 
-          	for (var i = 0; i < results.length; i++) {
+               for (var i = 0; i < results.length; i++) {
 
-          		var topicDiv = $("<div>");
+                    var topicDiv = $("<div>");
 
-          		//make a paragraph tag and store it in a variable called p 
+                    //make a paragraph tag and store it in a variable called p 
 
-          		var p = $("<p>").text("rating: " + results[i].rating);
+                    var p = $("<p>").text("rating: " + results[i].rating);
 
-          		//make an image tag with jQuery and store it in a variable named topicImage
+                    //make an image tag with jQuery and store it in a variable named topicImage
 
-          		var topicImage = $("<img>");
+                    var topicImage = $("<img>");
 
 
                     //set the image's class to "gif"
@@ -153,9 +152,9 @@ $("button").on("click", function() {
                     topicImage.attr("data-state", "still");
 
 
-          		//set the image's src to results[i]'s fixed_height_still.url
+                    //set the image's src to results[i]'s fixed_height_still.url
 
-          		topicImage.attr("src", results[i].images.fixed_height_still.url);
+                    topicImage.attr("src", results[i].images.fixed_height_still.url);
 
                     //set the image'a data-still atribute to the link for the still
                     topicImage.attr("data-still", results[i].images.fixed_height_still.url);
@@ -164,31 +163,31 @@ $("button").on("click", function() {
 
                     topicImage.attr("data-animate", results[i].images.fixed_height.url);
 
-          		//append the paragraph onto the TopicDiv
+                    //append the paragraph onto the TopicDiv
 
-          		topicDiv.append(p);
+                    topicDiv.append(p);
 
-          		topicDiv.append(topicImage);
+                    topicDiv.append(topicImage);
 
 
-				$("#gifs-appear-here").prepend(topicDiv);
+                    $("#gifs-appear-here").prepend(topicDiv);
 
                    
 
 
-          	//end of for loop
-          	}
+               //end of for loop
+               }
 
 
 
 //end of ajax call 
-          	});
+               });
 
 
 
-//end of button click function  
+//end of displayGifInfo function  
 
-          });
+         }
        
 
 
@@ -196,7 +195,7 @@ $("button").on("click", function() {
    $(document).on("click", ".gif", function() {
 
 
-     console.log("in the document click function");
+    
            
 
 
@@ -232,7 +231,7 @@ $("#add-topic").on("click", function(event){
      topics.push(newTopic);
 
 
-     console.log(topics);
+  
 
      renderButtons();
 
@@ -240,7 +239,9 @@ $("#add-topic").on("click", function(event){
 });
 
 
+//adding a click event listern to all elements wth a class of topic
 
+$(document).on("click", ".topic", displayGifInfo);
 
 
 
@@ -255,8 +256,4 @@ $("#add-topic").on("click", function(event){
 //end of document ready function
 
 });
-
-
-
-
 
