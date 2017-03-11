@@ -16,7 +16,7 @@ function renderButtons() {
 
 		//delete buttons before adding new ones
 
-		//$("#buttons-view").empty();
+		$("#buttons-view").empty();
 
 		//loops through the array of topics
 
@@ -67,7 +67,6 @@ function renderButtons() {
 
 
 
-
 	
 
 
@@ -78,7 +77,17 @@ function renderButtons() {
 
 
 
-//Add a form to your page that takes the value from a user input box 
+//Add a form to your page that takes the value from a user input box
+//and adds it into your topics array
+
+
+
+
+
+
+
+
+
 
 
 
@@ -97,14 +106,14 @@ from the GIPHY API and place them on the page*/
 
 $("button").on("click", function() {
 
-	console.log("I am in the button function");
+	//console.log("I am in the button function");
 
 	var topic = $(this).attr("data-name");
 
 
 //Add this once button click function is added $(this).attr("data-name");
 
-	var queryURL ="http://api.giphy.com/v1/gifs/search?q=" + topic +"&api_key=dc6zaTOxFJmzC";
+	var queryURL ="http://api.giphy.com/v1/gifs/search?q=" + topic +"&limit=10&api_key=dc6zaTOxFJmzC";
 
 
 
@@ -115,7 +124,7 @@ $("button").on("click", function() {
         }).done(function(response) {
           var results = response.data;
 
-          console.log(results);
+          //console.log(results);
           
 
           	for (var i = 0; i < results.length; i++) {
@@ -131,11 +140,29 @@ $("button").on("click", function() {
           		var topicImage = $("<img>");
 
 
-          		//set the image's src to results[i]'s fixed_height.url
+                    //set the image's class to "gif"
 
-          		topicImage.attr("src", results[i].images.fixed_height.url);
+                    topicImage.addClass("gif");
+
+                    //set the image's src to results[i]'s fixed_height_still.url
+
+                    topicImage.attr("src", results[i].images.fixed_height_still.url);
+
+                    //create an attribute called data-state and assign it to still
+
+                    topicImage.attr("data-state", "still");
 
 
+          		//set the image's src to results[i]'s fixed_height_still.url
+
+          		topicImage.attr("src", results[i].images.fixed_height_still.url);
+
+                    //set the image'a data-still atribute to the link for the still
+                    topicImage.attr("data-still", results[i].images.fixed_height_still.url);
+
+                    //set the image's data-animate attribute to the link for the animated gif
+
+                    topicImage.attr("data-animate", results[i].images.fixed_height.url);
 
           		//append the paragraph onto the TopicDiv
 
@@ -146,13 +173,11 @@ $("button").on("click", function() {
 
 				$("#gifs-appear-here").prepend(topicDiv);
 
+                   
+
 
           	//end of for loop
           	}
-
-
-
-
 
 
 
@@ -161,33 +186,64 @@ $("button").on("click", function() {
 
 
 
-
-
-
-          	
-
-
-          
-          	//create a div to hold the topic
-
-          	//ar topicDiv = $("<div class='topic'>");
-
-          	//storing the rating data
-
-          	//var rating = response.data.rating;
-
-          	//creating an element to display the rating
-
-          	//var pOne = $("<p>").text("rating: " + rating);
-
-          		//console.log(results.data);
-
 //end of button click function  
 
           });
        
 
-	
+
+
+   $(document).on("click", ".gif", function() {
+
+
+     console.log("in the document click function");
+           
+
+
+
+            var state = $(this).attr("data-state");
+      
+      if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+      } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+      }
+
+
+
+     //end of document click function
+
+    });
+
+
+
+//This listens to the add gif button and adds the topic to the array 
+//it also re-renders the buttons
+
+$("#add-topic").on("click", function(event){
+
+     event.preventDefault();
+
+     var newTopic = $("#topic-input").val().trim();
+
+
+     topics.push(newTopic);
+
+
+     console.log(topics);
+
+     renderButtons();
+
+
+});
+
+
+
+
+
+
 
 
 
